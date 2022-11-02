@@ -1,0 +1,83 @@
+name: "Terraform check"
+description: "Check terraform code"
+inputs:
+  directory:
+    description: "Directory in which to run the checks"
+    required: true
+  terraform_version:
+    description: "Terraform version to run the check against"
+    default: "latest"
+  post_comment:
+    description: "Post check result to PR comment if set as true"
+  github_token:
+    description: "Github token to post PR comment"
+outputs:
+  returncode:
+    description: "Terraform check return code"
+    value: ${{ steps.check.outputs.returncode }}
+  result:
+    description: "Terraform check result"
+    value: ${{ steps.result.outputs.result }}
+  report:
+    description: "Terraform check detailed report"
+    value: ${{ steps.result.outputs.report }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ inputs.terraform_version }}
+        terraform_wrapper: false
+
+    - run: pip install jinja2
+      shell: bash
+
+    - id: check
+      run: |
+        set +e
+        python3 ${{ github.action_path }}/tfcheck.py ${{ inputs.directory }} -report report.md > result.txt
+        echo "returncode=$?" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - id: result
+      run: |
+        delimiter="$(openssl rand -hex 8)"
+
+        echo "result<<$delimiter" >> $GITHUB_OUTPUT
+        echo "$(cat result.txt)" >> $GITHUB_OUTPUT
+        echo "$delimiter" >> $GITHUB_OUTPUT
+
+        echo "report<<$delimiter" >> $GITHUB_OUTPUT
+        echo "$(cat report.md)" >> $GITHUB_OUTPUT
+        echo "$delimiter" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - uses: actions/github-script@v6
+      if: ${{ inputs.post_comment == 'true' }}
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          const fs = require('fs')
+          const body = fs.readFileSync("result.md", "utf8")
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          })
+
+    - run: |
+        if [[ ${{ steps.check.outputs.returncode }} -eq 1 ]]; then
+          echo "::error ::${{ steps.result.outputs.result }}"
+          exit 1
+        elif [[ ${{ steps.check.outputs.returncode }} -eq 2 ]]; then
+          echo "::warning ::${{ steps.result.outputs.result }}"
+        fi
+      shell: bash
