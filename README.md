@@ -15,7 +15,7 @@ Make sure that your workflow already have the credentials needed by your Terrafo
 (e.g. authenticate to AWS with [aws-actions/configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials))
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@main
+- uses: HENNGE/terraform-check@v0.1.0
   with:
     directory: infra/tf
 ```
@@ -23,7 +23,7 @@ steps:
 Specific Terraform version can be used:
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@main
+- uses: HENNGE/terraform-check@v0.1.0
   with:
     directory: infra/tf
     terraform_version: 1.1.7
@@ -33,7 +33,7 @@ Detailed report can be automatically posted as a pull request comment.
 Make sure that Github token has permission to write into pull requests.
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@main
+- uses: HENNGE/terraform-check@v0.1.0
   with:
     directory: infra/tf
     post_comment: true
