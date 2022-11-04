@@ -64,7 +64,7 @@ runs:
         github-token: ${{ inputs.github_token }}
         script: |
           const fs = require('fs')
-          const body = fs.readFileSync("result.md", "utf8")
+          const body = fs.readFileSync("report.md", "utf8")
 
           github.rest.issues.createComment({
             issue_number: context.issue.number,
