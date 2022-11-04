@@ -80,13 +80,18 @@ class CheckResult:
 
 
 def run(cmd: str, path: str) -> subprocess.CompletedProcess:
-    return subprocess.run(
+    process = subprocess.run(
         cmd.split(),
         cwd=path,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         encoding="utf-8",
     )
+    print("-" * 77)
+    print(f"{cmd} (path: {path})")
+    print("-" * 77)
+    print(process.stdout)
+    return process
 
 
 def check(path: str) -> CheckResult:

@@ -39,8 +39,8 @@ runs:
     - id: check
       run: |
         set +e
-        python3 ${{ github.action_path }}/tfcheck.py ${{ inputs.directory }} -report report.md > result.txt
-        echo "returncode=$?" >> $GITHUB_OUTPUT
+        python3 ${{ github.action_path }}/tfcheck.py ${{ inputs.directory }} -report report.md | tee >(tail -1 > result.txt)
+        echo "returncode=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
       shell: bash
 
     - id: result
@@ -54,6 +54,8 @@ runs:
         echo "report<<$delimiter" >> $GITHUB_OUTPUT
         echo "$(cat report.md)" >> $GITHUB_OUTPUT
         echo "$delimiter" >> $GITHUB_OUTPUT
+
+        echo "$(cat report.md)" >> $GITHUB_STEP_SUMMARY
       shell: bash
 
     - uses: actions/github-script@v6
