@@ -1,0 +1,17 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+    - id: black
+      args: [--line-length=88, --safe]
+      language: python_venv
+      language_version: python3
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+    - id: isort
+      language: python_venv
+      language_version: python3
+      additional_dependencies:
+        - toml
+      files: ".*\\.py$"
