@@ -28,10 +28,19 @@ runs:
       with:
         python-version: '3.9'
 
-    - uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: ${{ inputs.terraform_version }}
-        terraform_wrapper: false
+    - name: Setup tfenv
+      run: |
+        if [[ ! -d ~/.tfenv ]]; then
+          git clone -b v3.0.0 https://github.com/tfutils/tfenv.git ~/.tfenv
+        fi
+        sudo ln -sf ~/.tfenv/bin/* /usr/local/bin
+      shell: bash
+
+    - name: Setup Terraform
+      run: |
+        tfenv install ${{ inputs.terraform_version }}
+        tfenv use ${{ inputs.terraform_version }}
+      shell: bash
 
     - run: pip install jinja2
       shell: bash
