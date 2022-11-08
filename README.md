@@ -20,6 +20,15 @@ steps:
     directory: infra/tf
 ```
 
+Multiple directories can be set as input, separated by space:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v0.1.0
+  with:
+    directory: infra/tf infra/tf2
+```
+
+
 Specific Terraform version can be used:
 ```yaml
 steps:
@@ -43,7 +52,7 @@ steps:
 
 ## Inputs
 
-- `directory`: (required) Directory containing the Terraform configuration.
+- `directory`: (required) One directory or multiple directories separated by space, containing the Terraform configuration.
 - `terraform_version`: (optional) Terraform version to use. Defaults to `latest`.
 - `post_comment`: (optional) Post [detailed report](#detailed-report) as pull request comment if set to `true`.
 - `github_token`: (optional) Github access token, required to post PR comments.
