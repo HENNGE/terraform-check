@@ -16,7 +16,7 @@ parser.add_argument("path", help="path to run terraform checks", nargs="+", type
 parser.add_argument(
     "-report",
     help="print detailed report to a file",
-    type=argparse.FileType("w", encoding="UTF-8"),
+    type=argparse.FileType("a", encoding="UTF-8"),
 )
 
 env = Environment(loader=FileSystemLoader(f"{os.path.dirname(__file__)}/templates"))

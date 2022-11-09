@@ -38,6 +38,25 @@ steps:
     terraform_version: 1.1.7
 ```
 
+
+If checking on multiple directories, you can set Terraform version for each directory:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v0.1.0
+  with:
+    directory: infra/tf infra/tf2
+    terraform_version: 1.1.7 1.3.4
+```
+
+If only one version is set, it will be used for all directories:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v0.1.0
+  with:
+    directory: infra/tf infra/tf2
+    terraform_version: 1.1.7
+```
+
 [Detailed report](#detailed-report) can be automatically posted as a pull request comment.
 Make sure that Github token has permission to write into pull requests.
 ```yaml
@@ -52,8 +71,10 @@ steps:
 
 ## Inputs
 
-- `directory`: (required) One directory or multiple directories separated by space, containing the Terraform configuration.
-- `terraform_version`: (optional) Terraform version to use. Defaults to `latest`.
+- `directory`: (required) One or more directories separated by space, containing the Terraform configuration.
+- `terraform_version`: (optional) Terraform version to use. 
+You can set version for each directory if checking on multiple directories. 
+Defaults to `latest`.
 - `post_comment`: (optional) Post [detailed report](#detailed-report) as pull request comment if set to `true`.
 - `github_token`: (optional) Github access token, required to post PR comments.
 

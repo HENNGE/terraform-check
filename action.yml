@@ -2,7 +2,7 @@ name: "Terraform check"
 description: "Check terraform code"
 inputs:
   directory:
-    description: "Directory in which to run the checks"
+    description: "One or more directories separated by space in which to run the checks"
     required: true
   terraform_version:
     description: "Terraform version to run the check against"
@@ -36,20 +36,28 @@ runs:
         sudo ln -sf ~/.tfenv/bin/* /usr/local/bin
       shell: bash
 
-    - name: Setup Terraform
-      run: |
-        tfenv install ${{ inputs.terraform_version }}
-        tfenv use ${{ inputs.terraform_version }}
-      shell: bash
-
     - run: pip install jinja2
       shell: bash
 
     - id: check
       run: |
         set +e
-        python3 ${{ github.action_path }}/tfcheck.py ${{ inputs.directory }} -report report.md | tee >(tail -1 > result.txt)
-        echo "returncode=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+        read -r -a directories <<< ${{ inputs.directory }}
+        read -r -a versions <<< ${{ inputs.terraform_version }}
+
+        len=${#directories[@]}
+
+        for (( i=0; i<len; i++)); do
+          # Append three dashes between reports
+          if [ "$i" -gt 0 ]; then
+            printf "\n\n---\n\n" >> report.md
+          fi
+
+          tfenv install "${versions[$i]}"
+          tfenv use "${versions[$i]}"
+
+          python3 tfcheck.py "${directories[$i]}" -report report.md | tee >(tail -1 >> result.txt)
+        done
       shell: bash
 
     - id: result
