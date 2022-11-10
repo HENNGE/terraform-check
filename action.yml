@@ -42,8 +42,8 @@ runs:
     - id: check
       run: |
         set +e
-        read -r -a directories <<< ${{ inputs.directory }}
-        read -r -a versions <<< ${{ inputs.terraform_version }}
+        read -r -a directories <<< "${{ inputs.directory }}"
+        read -r -a versions <<< "${{ inputs.terraform_version }}"
 
         len=${#directories[@]}
 
