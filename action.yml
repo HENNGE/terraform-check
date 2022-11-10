@@ -47,6 +47,7 @@ runs:
 
         len=${#directories[@]}
 
+        returncode=0
         for (( i=0; i<len; i++)); do
           # Append three dashes between reports
           if [ "$i" -gt 0 ]; then
@@ -57,7 +58,20 @@ runs:
           tfenv use "${versions[$i]}"
 
           python3 ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md | tee >(tail -1 >> result.txt)
+          ret=${PIPESTATUS[0]}
+
+          if [ "$returncode" -eq 0 ]; then
+            returncode=$ret
+          elif [ "$returncode" -eq 2 ]; then
+            if [ "$ret" -eq 1 ]; then
+              returncode=1
+            else
+              returncode=2
+            fi
+          fi
         done
+
+        echo "returncode=$returncode" >> $GITHUB_OUTPUT
       shell: bash
 
     - id: result
