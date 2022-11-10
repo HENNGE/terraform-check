@@ -54,12 +54,15 @@ runs:
             printf "\n\n---\n\n" >> report.md
           fi
 
+          # Change Terraform version
           tfenv install "${versions[$i]}"
           tfenv use "${versions[$i]}"
 
           python3 ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md | tee >(tail -1 >> result.txt)
           ret=${PIPESTATUS[0]}
 
+          # Set exitcode to 1 if any check failed
+          # Set exitcode to 2 if any check contains plan change
           if [ "$returncode" -eq 0 ]; then
             returncode=$ret
           elif [ "$returncode" -eq 2 ]; then
