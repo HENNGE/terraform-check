@@ -56,7 +56,7 @@ runs:
           tfenv install "${versions[$i]}"
           tfenv use "${versions[$i]}"
 
-          python3 tfcheck.py "${directories[$i]}" -report report.md | tee >(tail -1 >> result.txt)
+          python3 ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md | tee >(tail -1 >> result.txt)
         done
       shell: bash
 
