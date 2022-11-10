@@ -12,7 +12,7 @@ VALIDATE_CMD = "terraform validate -no-color"
 PLAN_CMD = "terraform plan -detailed-exitcode -no-color"
 
 parser = argparse.ArgumentParser()
-parser.add_argument("path", help="path to run terraform checks", nargs="+", type=str)
+parser.add_argument("path", help="path to run terraform checks", type=str)
 parser.add_argument(
     "-report",
     help="print detailed report to a file",
@@ -123,10 +123,14 @@ def check(path: str) -> CheckResult:
     )
 
 
-def render(results: list[CheckResult]) -> str:
-    outputs = []
-    for result in results:
-        outputs.append(
+if __name__ == "__main__":
+    args = parser.parse_args()
+
+    result = check(args.path)
+    print(f"Terraform check on {args.path} {result.check_result_msg()}")
+
+    if args.report:
+        args.report.write(
             template.render(
                 path=result.path,
                 init_result=result.init_result(),
@@ -139,27 +143,4 @@ def render(results: list[CheckResult]) -> str:
             )
         )
 
-    return "\n\n---\n\n".join(outputs)
-
-
-if __name__ == "__main__":
-    args = parser.parse_args()
-
-    results = []
-    exitcode = 0
-    for path in args.path:
-        result = check(path)
-        results.append(result)
-        # Set exitcode to 1 if any check is failed
-        # Set exitcode to 2 if any check contains plan change
-        if exitcode == 0:
-            exitcode = result.exitcode()
-        elif exitcode == 2:
-            exitcode = 1 if result.exitcode() == 1 else 2
-        print(f"Terraform check on {path} {result.check_result_msg()}")
-
-    rendered = render(results)
-    if args.report:
-        args.report.write(rendered)
-
-    sys.exit(exitcode)
+    sys.exit(result.exitcode())
