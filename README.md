@@ -20,15 +20,6 @@ steps:
     directory: infra/tf
 ```
 
-Multiple directories can be set as input, separated by space:
-```yaml
-steps:
-- uses: HENNGE/terraform-check@v0.1.0
-  with:
-    directory: infra/tf infra/tf2
-```
-
-
 Specific Terraform version can be used:
 ```yaml
 steps:
@@ -38,6 +29,13 @@ steps:
     terraform_version: 1.1.7
 ```
 
+Multiple directories can be set as input, separated by space:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v0.1.0
+  with:
+    directory: infra/tf infra/tf2
+```
 
 If checking on multiple directories, you can set Terraform version for each directory:
 ```yaml
