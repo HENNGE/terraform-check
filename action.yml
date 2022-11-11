@@ -61,6 +61,12 @@ runs:
           python3 ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md | tee >(tail -1 >> result.txt)
           ret=${PIPESTATUS[0]}
 
+          if [ "$ret" -eq 1 ]; then
+            echo "::error ::$(tail -1 result.txt)"
+          elif [ "$ret" -eq 2 ]; then
+            echo "::warning ::$(tail -1 result.txt)"
+          fi
+
           # Set exitcode to 1 if any check failed
           # Set exitcode to 2 if any check contains plan change
           if [ "$returncode" -eq 0 ]; then
@@ -109,9 +115,6 @@ runs:
 
     - run: |
         if [[ ${{ steps.check.outputs.returncode }} -eq 1 ]]; then
-          echo "::error ::${{ steps.result.outputs.result }}"
           exit 1
-        elif [[ ${{ steps.check.outputs.returncode }} -eq 2 ]]; then
-          echo "::warning ::${{ steps.result.outputs.result }}"
         fi
       shell: bash
