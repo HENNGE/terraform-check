@@ -15,7 +15,7 @@ Make sure that your workflow already have the credentials needed by your Terrafo
 (e.g. authenticate to AWS with [aws-actions/configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials))
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@v1.0.0
+- uses: HENNGE/terraform-check@v1
   with:
     directory: infra/tf
 ```
@@ -23,7 +23,7 @@ steps:
 Specific Terraform version can be used:
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@v1.0.0
+- uses: HENNGE/terraform-check@v1
   with:
     directory: infra/tf
     terraform_version: 1.1.7
@@ -32,7 +32,7 @@ steps:
 Multiple directories can be set as input, separated by space:
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@v1.0.0
+- uses: HENNGE/terraform-check@v1
   with:
     directory: infra/tf infra/tf2
 ```
@@ -40,7 +40,7 @@ steps:
 If checking on multiple directories, you can set Terraform version for each directory:
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@v1.0.0
+- uses: HENNGE/terraform-check@v1
   with:
     directory: infra/tf infra/tf2
     terraform_version: 1.1.7 1.3.4
@@ -49,7 +49,7 @@ steps:
 If only one version is set, it will be used for all directories:
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@v1.0.0
+- uses: HENNGE/terraform-check@v1
   with:
     directory: infra/tf infra/tf2
     terraform_version: 1.1.7
@@ -59,13 +59,22 @@ steps:
 Make sure that Github token has permission to write into pull requests.
 ```yaml
 steps:
-- uses: HENNGE/terraform-check@v1.0.0
+- uses: HENNGE/terraform-check@v1
   with:
     directory: infra/tf
     post_comment: true
     github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+If `post_comment` is set to `nonzero`, comments will only be posted if return code is not zero (checks failed or there are changes).
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v1
+  with:
+    directory: infra/tf
+    post_comment: nonzero
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ## Inputs
 
