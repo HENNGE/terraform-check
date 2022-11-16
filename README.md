@@ -73,7 +73,9 @@ steps:
 - `terraform_version`: (optional) Terraform version to use. 
 You can set version for each directory if checking on multiple directories. 
 Defaults to `latest`.
-- `post_comment`: (optional) Post [detailed report](#detailed-report) as pull request comment if set to `true`.
+- `post_comment`: (optional) Whether to post [detailed report](#detailed-report) as pull request comment. 
+  - If set to `true`, will post comment every time.
+  - If set to `nonzero`, will post comment only if any checks failed or there's changes to the Terraform plan ([returncode](#outputs) other than 0).
 - `github_token`: (optional) Github access token, required to post PR comments.
 
 ## Outputs
