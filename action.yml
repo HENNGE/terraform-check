@@ -99,7 +99,7 @@ runs:
       shell: bash
 
     - uses: actions/github-script@v6
-      if: ${{ inputs.post_comment == 'true' }}
+      if: ${{ inputs.post_comment == 'true' || ( inputs.post_comment == 'nonzero' && steps.check.outputs.returncode != 0 ) }}
       with:
         github-token: ${{ inputs.github_token }}
         script: |
