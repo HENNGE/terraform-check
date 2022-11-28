@@ -1,5 +1,9 @@
 name: "Terraform check action"
 description: "Check terraform code"
+author: "HENNGE"
+branding:
+  icon: check-square
+  color: white
 inputs:
   directory:
     description: "One or more directories separated by space in which to run the checks"
