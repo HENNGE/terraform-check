@@ -1,4 +1,4 @@
-name: "Terraform check"
+name: "Terraform check action"
 description: "Check terraform code"
 inputs:
   directory:
