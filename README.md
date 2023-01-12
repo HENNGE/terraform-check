@@ -58,6 +58,12 @@ steps:
 [Detailed report](#detailed-report) can be automatically posted as a pull request comment.
 Make sure that Github token has permission to write into pull requests.
 ```yaml
+permissions:
+  contents: read
+  pull-requests: write
+
+# ... (omitted)
+
 steps:
 - uses: HENNGE/terraform-check@v1
   with:
