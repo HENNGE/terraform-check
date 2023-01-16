@@ -13,6 +13,8 @@ inputs:
     default: "latest"
   post_comment:
     description: "Post check result to PR comment if set as true"
+  hide_refresh:
+    description: "Hide state refresh output from report"
   github_token:
     description: "Github token to post PR comment"
 outputs:
@@ -49,6 +51,10 @@ runs:
         read -r -a directories <<< "${{ inputs.directory }}"
         read -r -a versions <<< "${{ inputs.terraform_version }}"
 
+        if [ "${{ inputs.hide_refresh }}" = "true" ]; then
+          hide=-hide-refresh
+        fi
+
         len=${#directories[@]}
 
         returncode=0
@@ -62,7 +68,7 @@ runs:
           tfenv install "${versions[$i]}"
           tfenv use "${versions[$i]}"
 
-          python3 ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md | tee >(tail -1 >> result.txt)
+          python3 ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
           ret=${PIPESTATUS[0]}
 
           if [ "$ret" -eq 1 ]; then
