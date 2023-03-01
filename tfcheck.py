@@ -9,8 +9,7 @@ from jinja2 import Environment, FileSystemLoader
 FMT_CMD = "terraform fmt -check=true -write=false -recursive -diff"
 INIT_CMD = "terraform init -no-color"
 VALIDATE_CMD = "terraform validate -no-color"
-REFRESH_CMD = "terraform refresh -no-color"
-PLAN_CMD = "terraform plan -detailed-exitcode -refresh=false -no-color"
+PLAN_CMD = "terraform plan -detailed-exitcode -no-color"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("path", help="path to run terraform checks", type=str)
@@ -44,8 +43,6 @@ class CheckResult:
     fmt_output: str
     validate_success: bool
     validate_output: str
-    refresh_success: bool
-    refresh_output: str
     plan_returncode: int
     plan_success: bool
     plan_changes: bool
@@ -74,9 +71,6 @@ class CheckResult:
 
     def validate_result(self) -> str:
         return "success" if self.validate_success else "failed"
-
-    def refresh_result(self) -> str:
-        return "success" if self.refresh_success else "failed"
 
     def plan_result(self) -> str:
         return "success" if self.plan_success else "failed"
@@ -115,9 +109,6 @@ def check(path: str) -> CheckResult:
     # Terraform validate
     validate = run(VALIDATE_CMD, path)
 
-    # Terraform refresh
-    refresh = run(REFRESH_CMD, path)
-
     # Terraform plan
     plan = run(PLAN_CMD, path)
 
@@ -129,8 +120,6 @@ def check(path: str) -> CheckResult:
         fmt_output=fmt.stdout,
         validate_success=not validate.returncode,
         validate_output=validate.stdout,
-        refresh_success=refresh.returncode,
-        refresh_output=refresh.stdout,
         # Terraform plan return code 2 = Succeeded with non-empty diff (changes present)
         plan_returncode=plan.returncode,
         plan_success=plan.returncode in [0, 2],
@@ -145,6 +134,21 @@ if __name__ == "__main__":
     result = check(args.path)
     print(f"Terraform check on {args.path} {result.check_result_msg()}")
 
+    # Remove refreshing messages from plan output
+    if args.hide_refresh:
+        result.plan_output = "\n".join(
+            line
+            for line in result.plan_output.split("\n")
+            if not any(
+                pattern in line
+                for pattern in (
+                    "Refreshing state...",
+                    "Reading...",
+                    "Read complete after",
+                )
+            )
+        )
+
     if args.report:
         args.report.write(
             template.render(
@@ -153,7 +157,6 @@ if __name__ == "__main__":
                 check_result=result.check_result_msg(),
                 fmt_result=result.fmt_result(),
                 validate_result=result.validate_result(),
-                refresh_output="" if args.hide_refresh else result.refresh_output,
                 plan_result=result.plan_result(),
                 plan_output=result.plan_output,
                 plan_msg=result.plan_msg(),

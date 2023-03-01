@@ -9,7 +9,7 @@
 
 <details><summary>Show Plan</summary>
 
-```terraform {{ refresh_output }}{{ plan_output }}
+```terraform {{ plan_output }}
 ```
 
 </details>
