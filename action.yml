@@ -42,7 +42,9 @@ runs:
         sudo ln -sf ~/.tfenv/bin/* /usr/local/bin
       shell: bash
 
-    - run: pip install jinja2
+    - run: |
+        python -m venv venv
+        venv/bin/pip install jinja2
       shell: bash
 
     - id: check
@@ -68,7 +70,7 @@ runs:
           tfenv install "${versions[$i]}"
           tfenv use "${versions[$i]}"
 
-          python3 ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
+          venv/bin/python ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
           ret=${PIPESTATUS[0]}
 
           if [ "$ret" -eq 1 ]; then
