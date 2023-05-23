@@ -17,6 +17,8 @@ inputs:
     description: "Hide state refresh output from report"
   github_token:
     description: "Github token to post PR comment"
+  issue_number:
+    description: "Post comment to a specific issue or PR instead of the current one"
 outputs:
   returncode:
     description: "Terraform check return code"
@@ -118,8 +120,10 @@ runs:
           const fs = require('fs')
           const body = fs.readFileSync("report.md", "utf8")
 
+          const issue_number = Number('${{ inputs.issue_number }}') || context.issue.number
+
           github.rest.issues.createComment({
-            issue_number: context.issue.number,
+            issue_number,
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: body
