@@ -93,6 +93,7 @@ Defaults to `latest`.
   - If set to `true`, will post comment every time.
   - If set to `nonzero`, will post comment only if any checks failed or there's changes to the Terraform plan ([returncode](#outputs) other than 0).
 - `github_token`: (optional) Github access token, required to post PR comments.
+- `issue_number`: (optional) If set, post comment to a specific issue or PR instead of the current one.
 
 ## Outputs
 
