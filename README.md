@@ -29,6 +29,15 @@ steps:
     terraform_version: 1.1.7
 ```
 
+If terraform is already installed, it can be used:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v1
+  with:
+    directory: infra/tf
+    terraform_version: system
+```
+
 Multiple directories can be set as input, separated by space:
 ```yaml
 steps:
