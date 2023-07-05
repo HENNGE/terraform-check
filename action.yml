@@ -37,7 +37,7 @@ runs:
         python-version: '3.9'
 
     - name: Setup tfenv
-      if: "${{ inputs.terraform_version != 'system' }}"
+      if: ${{ inputs.terraform_version != 'system' }}
       run: |
         if [[ ! -d ~/.tfenv ]]; then
           git clone -b v3.0.0 https://github.com/tfutils/tfenv.git ~/.tfenv
