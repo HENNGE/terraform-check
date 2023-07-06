@@ -9,7 +9,7 @@ inputs:
     description: "One or more directories separated by space in which to run the checks"
     required: true
   terraform_version:
-    description: "Terraform version to run the check against"
+    description: "Terraform version to run the check against. Set to 'system' to use the system terraform."
     default: "latest"
   post_comment:
     description: "Post check result to PR comment if set as true. Set to 'update' to update the existing comment on subsequent runs, after posting the initial comment."
@@ -37,6 +37,7 @@ runs:
         python-version: '3.9'
 
     - name: Setup tfenv
+      if: ${{ inputs.terraform_version != 'system' }}
       run: |
         if [[ ! -d ~/.tfenv ]]; then
           git clone -b v3.0.0 https://github.com/tfutils/tfenv.git ~/.tfenv
@@ -68,11 +69,18 @@ runs:
             printf "\n\n---\n\n" >> report.md
           fi
 
-          # Change Terraform version
-          tfenv install "${versions[$i]}"
-          tfenv use "${versions[$i]}"
+          if [ "${versions[$i]}" = "system" ] ; then
+            echo "Using system provided terraform"
+            terraform --version
+          elif [ -z "${versions[$i]}" ] ; then
+            : # using whatever we setup previously
+          else
+            # Change Terraform version
+            tfenv install "${versions[$i]}"
+            tfenv use "${versions[$i]}"
+          fi
 
-          venv/bin/python ${{ github.action_path }}/tfcheck.py "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
+          venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
           ret=${PIPESTATUS[0]}
 
           if [ "$ret" -eq 1 ]; then

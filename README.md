@@ -29,6 +29,15 @@ steps:
     terraform_version: 1.1.7
 ```
 
+If terraform is already installed, it can be used:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v1
+  with:
+    directory: infra/tf
+    terraform_version: system
+```
+
 Multiple directories can be set as input, separated by space:
 ```yaml
 steps:
@@ -97,6 +106,7 @@ steps:
 - `directory`: (required) One or more directories separated by space, containing the Terraform configuration.
 - `terraform_version`: (optional) Terraform version to use. 
 You can set version for each directory if checking on multiple directories. 
+If set to `system`, the action will use the terraform version already installed.
 Defaults to `latest`.
 - `hide_refresh`: (optional) Hide state refresh output from report
 - `post_comment`: (optional) Whether to post [detailed report](#detailed-report) as pull request comment. 
