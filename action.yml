@@ -12,7 +12,7 @@ inputs:
     description: "Terraform version to run the check against"
     default: "latest"
   post_comment:
-    description: "Post check result to PR comment if set as true"
+    description: "Post check result to PR comment if set as true. Set to 'update' to update the existing comment on subsequent runs, after posting the initial comment."
   hide_refresh:
     description: "Hide state refresh output from report"
   github_token:
@@ -113,7 +113,7 @@ runs:
       shell: bash
 
     - uses: actions/github-script@v6
-      if: ${{ inputs.post_comment == 'true' || ( inputs.post_comment == 'nonzero' && steps.check.outputs.returncode != 0 ) }}
+      if: ${{ inputs.post_comment == 'true' || inputs.post_comment == 'update' || ( inputs.post_comment == 'nonzero' && steps.check.outputs.returncode != 0 ) }}
       with:
         github-token: ${{ inputs.github_token }}
         script: |
@@ -122,12 +122,34 @@ runs:
 
           const issue_number = Number('${{ inputs.issue_number }}') || context.issue.number
 
-          github.rest.issues.createComment({
-            issue_number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: body
-          })
+          let botComment = null;
+          if ('${{ inputs.post_comment }}' == 'update') {
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Terraform check on')
+            });
+          }
+
+          if (botComment) {
+            github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: body
+            });
+          } else {
+            github.rest.issues.createComment({
+              issue_number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+          }
 
     - run: |
         if [[ ${{ steps.check.outputs.returncode }} -eq 1 ]]; then

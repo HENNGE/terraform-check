@@ -72,6 +72,16 @@ steps:
     github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+If `post_comment` is set to `update`, the previous comment will be updated if the action runs again.
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v1
+  with:
+    directory: infra/tf
+    post_comment: update
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+```
+
 If `post_comment` is set to `nonzero`, comments will only be posted if return code is not zero (checks failed or there are changes).
 ```yaml
 steps:
@@ -90,8 +100,9 @@ You can set version for each directory if checking on multiple directories.
 Defaults to `latest`.
 - `hide_refresh`: (optional) Hide state refresh output from report
 - `post_comment`: (optional) Whether to post [detailed report](#detailed-report) as pull request comment. 
-  - If set to `true`, will post comment every time.
-  - If set to `nonzero`, will post comment only if any checks failed or there's changes to the Terraform plan ([returncode](#outputs) other than 0).
+  - If set to `true`, will post a comment every time.
+  - If set to `update`, will post a comment and then update the existing comment on any subsequent runs.
+  - If set to `nonzero`, will post a comment only if any checks failed or there's changes to the Terraform plan ([returncode](#outputs) other than 0).
 - `github_token`: (optional) Github access token, required to post PR comments.
 - `issue_number`: (optional) If set, post comment to a specific issue or PR instead of the current one.
 
