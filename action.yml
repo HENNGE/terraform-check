@@ -133,9 +133,9 @@ runs:
           let botComment = null;
           if ('${{ inputs.post_comment }}' == 'update') {
             const { data: comments } = await github.rest.issues.listComments({
+              issue_number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
             });
 
             botComment = comments.find(comment => {
