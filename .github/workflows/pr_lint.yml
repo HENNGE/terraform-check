@@ -1,0 +1,23 @@
+name: PR title conventional-commits linting
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  pr_lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: HENNGE/conventional-pull-request-action@v0.2.0-node16
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commitTitleMatch: 'false'
+          ignoreCommits: 'true'
