@@ -11,6 +11,8 @@ inputs:
   terraform_version:
     description: "Terraform version to run the check against. Set to 'system' to use the system terraform."
     default: "latest"
+  plan_args:
+    description: "Optional: Additional arguments to pass to terraform plan. This should be passed as json array."
   post_comment:
     description: "Post check result to PR comment if set as true. Set to 'update' to update the existing comment on subsequent runs, after posting the initial comment."
   hide_refresh:
@@ -51,10 +53,13 @@ runs:
       shell: bash
 
     - id: check
+      env:
+        PLAN_ARGS: ${{ inputs.plan_args }}
       run: |
         set +e
         read -r -a directories <<< "${{ inputs.directory }}"
         read -r -a versions <<< "${{ inputs.terraform_version }}"
+        readarray -t plan_args < <(printf '%s\n' "$PLAN_ARGS" | jq -r '.[] | if . == null then "" else . end')
 
         if [ "${{ inputs.hide_refresh }}" = "true" ]; then
           hide=-hide-refresh
@@ -80,7 +85,12 @@ runs:
             tfenv use "${versions[$i]}"
           fi
 
-          venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
+          if [ -z "${plan_args[$i]}" ] ; then
+            venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
+          else
+            printf "Passing these args to plan: %s\n" "${plan_args[$i]}"
+            venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md -plan-args "${plan_args[$i]}" $hide | tee >(tail -1 >> result.txt)
+          fi
           ret=${PIPESTATUS[0]}
 
           if [ "$ret" -eq 1 ]; then

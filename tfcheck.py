@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 from dataclasses import dataclass
+from typing import Optional
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -13,6 +14,9 @@ PLAN_CMD = "terraform plan -detailed-exitcode -no-color"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("path", help="path to run terraform checks", type=str)
+parser.add_argument(
+    "-plan-args", help="addition args to pass to terraform plan", type=str
+)
 parser.add_argument(
     "-report",
     help="print detailed report to a file",
@@ -99,7 +103,7 @@ def run(cmd: str, path: str) -> subprocess.CompletedProcess:
     return process
 
 
-def check(path: str) -> CheckResult:
+def check(path: str, plan_args: Optional[str] = None) -> CheckResult:
     # Terraform init
     init = run(INIT_CMD, path)
 
@@ -110,7 +114,10 @@ def check(path: str) -> CheckResult:
     validate = run(VALIDATE_CMD, path)
 
     # Terraform plan
-    plan = run(PLAN_CMD, path)
+    if plan_args:
+        plan = run(PLAN_CMD + " " + plan_args, path)
+    else:
+        plan = run(PLAN_CMD, path)
 
     return CheckResult(
         path=path,
@@ -131,7 +138,7 @@ def check(path: str) -> CheckResult:
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    result = check(args.path)
+    result = check(args.path, args.plan_args)
     print(f"Terraform check on {args.path} {result.check_result_msg()}")
 
     # Remove refreshing messages from plan output
