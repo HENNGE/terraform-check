@@ -81,7 +81,7 @@ class CheckResult:
         elif self.plan_returncode == 1:
             return "⛔️Failed: see details⛔️"
         else:
-            return "⚠️There are changes: see details⚠"
+            return "⚠️There are changes: see details⚠️"
 
 
 def run(cmd: str, path: str) -> subprocess.CompletedProcess:
