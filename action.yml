@@ -140,7 +140,7 @@ runs:
 
             directory = '${{ inputs.directory }}'.split(' ')[0]
             botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform check on `${directory}`)
+              return comment.user.type === 'Bot' && comment.body.includes(`Terraform check on ${directory}`)
             });
           }
 
