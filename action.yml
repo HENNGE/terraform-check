@@ -138,8 +138,9 @@ runs:
               repo: context.repo.repo,
             });
 
+            directory = '${{ inputs.directory }}'.split(' ')[0]
             botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform check on')
+              return comment.user.type === 'Bot' && comment.body.includes('Terraform check on `${directory}`)
             });
           }
 
