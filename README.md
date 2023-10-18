@@ -64,6 +64,15 @@ steps:
     terraform_version: 1.1.7
 ```
 
+If checking directories, you can pass different plan arguments for each:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v1
+  with:
+    directory: infra/tf infra/tf2
+    plan_args: '["-var foo_version=${{ env.FOO_VERSION }}", ""]'
+```
+
 [Detailed report](#detailed-report) can be automatically posted as a pull request comment.
 Make sure that Github token has permission to write into pull requests.
 ```yaml
@@ -115,6 +124,12 @@ Defaults to `latest`.
   - If set to `nonzero`, will post a comment only if any checks failed or there's changes to the Terraform plan ([returncode](#outputs) other than 0).
 - `github_token`: (optional) Github access token, required to post PR comments.
 - `issue_number`: (optional) If set, post comment to a specific issue or PR instead of the current one.
+- `plan_args`: (optional) If set, additional arguments to pass to `terraform plan`.
+Note that this is passed through as serialised json array, corresponding to the
+array of directories passed. (This is so you can have different args per
+terraform plan invocation). The strings will be passed directory into the shell,
+so if you have spaces in variables you will need to quote them, but escape the
+quotes (and then escape in json).
 
 ## Outputs
 
