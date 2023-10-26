@@ -10,5 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v3
+        id: release
         with:
           release-type: simple
+
+      - uses: actions/checkout@v2
+
+      - name: Update major version tag
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git tag -d v${{ steps.release.outputs.major }} || true
+          git push origin :v${{ steps.release.outputs.major }} || true
+          git tag -a v${{ steps.release.outputs.major }} -m "Release v${{ steps.release.outputs.major }}"
+          git push origin v${{ steps.release.outputs.major }}
