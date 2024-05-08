@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/HENNGE/terraform-check/compare/v1.5.0...v1.6.0) (2024-05-08)
+
+
+### Features
+
+* upgrade gha dependencies ([#32](https://github.com/HENNGE/terraform-check/issues/32)) ([b01b2c2](https://github.com/HENNGE/terraform-check/commit/b01b2c235440c62f1070d76fbec2e11c98a447a3))
+
 ## [1.5.0](https://github.com/HENNGE/terraform-check/compare/v1.4.1...v1.5.0) (2023-10-18)
 
 
