@@ -34,9 +34,9 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.12'
 
     - name: Setup tfenv
       if: ${{ inputs.terraform_version != 'system' }}
@@ -130,7 +130,7 @@ runs:
         echo "$(cat report.md)" >> $GITHUB_STEP_SUMMARY
       shell: bash
 
-    - uses: actions/github-script@v6
+    - uses: actions/github-script@v7
       if: ${{ inputs.post_comment == 'true' || inputs.post_comment == 'update' || ( inputs.post_comment == 'nonzero' && steps.check.outputs.returncode != 0 ) }}
       with:
         github-token: ${{ inputs.github_token }}
