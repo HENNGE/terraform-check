@@ -189,9 +189,10 @@ if __name__ == "__main__":
         if args.full_report:
             args.full_report.write(report)
 
-        if len(report) > 65536:
-            report = remove_plan(report)
+        if args.report:
+            if len(report) > 65536:
+                report = remove_plan(report)
 
-        args.report.write(report)
+            args.report.write(report)
 
     sys.exit(result.exitcode())
