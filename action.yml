@@ -86,7 +86,7 @@ runs:
           fi
 
           if [ -z "${plan_args[$i]}" ] ; then
-            venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
+            venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md -full-report full_report.md $hide | tee >(tail -1 >> result.txt)
           else
             printf "Passing these args to plan: %s\n" "${plan_args[$i]}"
             venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md -full-report full_report.md -plan-args "${plan_args[$i]}" $hide | tee >(tail -1 >> result.txt)
