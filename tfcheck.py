@@ -135,6 +135,19 @@ def check(path: str, plan_args: Optional[str] = None) -> CheckResult:
     )
 
 
+def remove_plan(report: str) -> str:
+    report_lines = []
+    add_line = True
+    for line in report.splitlines():
+        if add_line and line == "<details><summary>Show Plan</summary>":
+            add_line = False
+        if add_line:
+            report_lines.append(line)
+        if not add_line and line == "</details>":
+            add_line = True
+    return "\n".join(report_lines)
+
+
 if __name__ == "__main__":
     args = parser.parse_args()
 
@@ -157,17 +170,19 @@ if __name__ == "__main__":
         )
 
     if args.report:
-        args.report.write(
-            template.render(
-                path=result.path,
-                init_result=result.init_result(),
-                check_result=result.check_result_msg(),
-                fmt_result=result.fmt_result(),
-                validate_result=result.validate_result(),
-                plan_result=result.plan_result(),
-                plan_output=result.plan_output,
-                plan_msg=result.plan_msg(),
-            )
+        report = template.render(
+            path=result.path,
+            init_result=result.init_result(),
+            check_result=result.check_result_msg(),
+            fmt_result=result.fmt_result(),
+            validate_result=result.validate_result(),
+            plan_result=result.plan_result(),
+            plan_output=result.plan_output,
+            plan_msg=result.plan_msg(),
         )
+        if len(report) > 65536:
+            report = remove_plan(report)
+
+        args.report.write(report)
 
     sys.exit(result.exitcode())
