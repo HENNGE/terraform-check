@@ -175,7 +175,7 @@ if __name__ == "__main__":
         )
 
     if args.report or args.full_report:
-        full_report = template.render(
+        report = template.render(
             path=result.path,
             init_result=result.init_result(),
             check_result=result.check_result_msg(),
@@ -187,11 +187,10 @@ if __name__ == "__main__":
         )
 
         if args.full_report:
-            args.full_report.write(full_report)
+            args.full_report.write(report)
 
-        report = full_report
-        if len(full_report) > 65536:
-            report = remove_plan(full_report)
+        if len(report) > 65536:
+            report = remove_plan(report)
 
         args.report.write(report)
 
