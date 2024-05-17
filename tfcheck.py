@@ -189,6 +189,7 @@ if __name__ == "__main__":
         if args.full_report:
             args.full_report.write(full_report)
 
+        report = full_report
         if len(full_report) > 65536:
             report = remove_plan(full_report)
 
