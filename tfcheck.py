@@ -19,13 +19,18 @@ parser.add_argument(
 )
 parser.add_argument(
     "-report",
-    help="print detailed report to a file",
+    help="print report to a file, removing plans if report length > 65336",
     type=argparse.FileType("a", encoding="UTF-8"),
 )
 parser.add_argument(
     "-hide-refresh",
     help="hide terraform state refresh output from report",
     action=argparse.BooleanOptionalAction,
+)
+parser.add_argument(
+    "-full-report",
+    help="print full report to a file",
+    type=argparse.FileType("a", encoding="UTF-8"),
 )
 
 env = Environment(loader=FileSystemLoader(f"{os.path.dirname(__file__)}/templates"))
@@ -169,8 +174,8 @@ if __name__ == "__main__":
             )
         )
 
-    if args.report:
-        report = template.render(
+    if args.report or args.full_report:
+        full_report = template.render(
             path=result.path,
             init_result=result.init_result(),
             check_result=result.check_result_msg(),
@@ -180,8 +185,12 @@ if __name__ == "__main__":
             plan_output=result.plan_output,
             plan_msg=result.plan_msg(),
         )
-        if len(report) > 65536:
-            report = remove_plan(report)
+
+        if args.full_report:
+            args.full_report.write(full_report)
+
+        if len(full_report) > 65536:
+            report = remove_plan(full_report)
 
         args.report.write(report)
 
