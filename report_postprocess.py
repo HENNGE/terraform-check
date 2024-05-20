@@ -14,6 +14,9 @@ def remove_plan(report: str) -> str:
     for line in report.splitlines():
         if add_line and line == "<details><summary>Show Plan</summary>":
             add_line = False
+            report_lines.append(
+                "The plan is too long, check workflow summary to view the full report."
+            )
         if add_line:
             report_lines.append(line)
         if not add_line and line == "</details>":
