@@ -119,7 +119,7 @@ runs:
       run: |
         echo "$(cat report.md)" >> $GITHUB_STEP_SUMMARY
 
-        venv/bin/python "${{ github.action_path }}/report_postprocess.py" -report report.md
+        venv/bin/python "${{ github.action_path }}/report_postprocess.py" report.md
 
         delimiter="$(openssl rand -hex 8)"
 
