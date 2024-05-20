@@ -86,10 +86,10 @@ runs:
           fi
 
           if [ -z "${plan_args[$i]}" ] ; then
-            venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md -full-report full_report.md $hide | tee >(tail -1 >> result.txt)
+            venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md $hide | tee >(tail -1 >> result.txt)
           else
             printf "Passing these args to plan: %s\n" "${plan_args[$i]}"
-            venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md -full-report full_report.md -plan-args "${plan_args[$i]}" $hide | tee >(tail -1 >> result.txt)
+            venv/bin/python "${{ github.action_path }}/tfcheck.py" "${directories[$i]}" -report report.md -plan-args "${plan_args[$i]}" $hide | tee >(tail -1 >> result.txt)
           fi
           ret=${PIPESTATUS[0]}
 
@@ -117,6 +117,10 @@ runs:
 
     - id: result
       run: |
+        echo "$(cat report.md)" >> $GITHUB_STEP_SUMMARY
+
+        venv/bin/python "${{ github.action_path }}/report_postprocess.py" -report report.md
+
         delimiter="$(openssl rand -hex 8)"
 
         echo "result<<$delimiter" >> $GITHUB_OUTPUT
@@ -126,8 +130,6 @@ runs:
         echo "report<<$delimiter" >> $GITHUB_OUTPUT
         echo "$(cat report.md)" >> $GITHUB_OUTPUT
         echo "$delimiter" >> $GITHUB_OUTPUT
-
-        echo "$(cat full_report.md)" >> $GITHUB_STEP_SUMMARY
       shell: bash
 
     - uses: actions/github-script@v7
