@@ -15,7 +15,7 @@ def remove_plan(report: str) -> str:
         if add_line and line == "<details><summary>Show Plan</summary>":
             add_line = False
             report_lines.append(
-                "The plan is too long, check workflow summary to view the full report."
+                "_The plan is too long, check workflow summary to view the full report._"
             )
         if add_line:
             report_lines.append(line)
