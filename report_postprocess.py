@@ -11,7 +11,7 @@ parser.add_argument(
 
 def remove_plan(report: str) -> str:
     report_lines = [
-        f"### ⚠️ _Terraform plan details have been removed from the report to fit within the maximum comment length. Check [workflow summary]({os.environ["GITHUB_SERVER_URL"]}/{os.environ(["GITHUB_REPOSITORY"]}/actions/runs/{os.environ["GITHUB_RUN_ID"]}) for the full report._",
+        f"### ⚠️ _Terraform plan details have been removed from the report to fit within the maximum comment length. Check [workflow summary]({os.environ["GITHUB_SERVER_URL"]}/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{os.environ["GITHUB_RUN_ID"]}) for the full report._",
         "",
         "---",
         ""
