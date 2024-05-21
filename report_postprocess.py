@@ -14,13 +14,15 @@ def remove_plan(report: str) -> str:
     for line in report.splitlines():
         if add_line and line == "<details><summary>Show Plan</summary>":
             add_line = False
-            report_lines.append(
-                "_The plan is too long, check workflow summary to view the full report._"
-            )
         if add_line:
             report_lines.append(line)
         if not add_line and line == "</details>":
             add_line = True
+
+    report_lines.append("")
+    eport_lines.append("---")
+    eport_lines.append("")
+    eport_lines.append("Note: the terraform plans are too long. Please check the workflow summary to view the full report.")
     return "\n".join(report_lines)
 
 
