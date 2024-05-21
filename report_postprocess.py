@@ -9,7 +9,12 @@ parser.add_argument(
 
 
 def remove_plan(report: str) -> str:
-    report_lines = []
+    report_lines = [
+        f"### ⚠️ _Terraform plan details have been removed from the report to fit within the maximum comment length. Check [workflow summary]({os.environ("GITHUB_SERVER_URL")}/{os.environ("GITHUB_REPOSITORY")}/actions/runs/{os.environ("GITHUB_RUN_ID")}) for the full report._",
+        "",
+        "---",
+        ""
+    ]
     add_line = True
     for line in report.splitlines():
         if add_line and line == "<details><summary>Show Plan</summary>":
@@ -18,11 +23,6 @@ def remove_plan(report: str) -> str:
             report_lines.append(line)
         if not add_line and line == "</details>":
             add_line = True
-
-    report_lines.append("")
-    report_lines.append("---")
-    report_lines.append("")
-    report_lines.append("### _Note: the terraform plans are too long. Check workflow summary to view the full report._")
     return "\n".join(report_lines)
 
 
