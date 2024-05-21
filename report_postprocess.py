@@ -20,9 +20,9 @@ def remove_plan(report: str) -> str:
             add_line = True
 
     report_lines.append("")
-    eport_lines.append("---")
-    eport_lines.append("")
-    eport_lines.append("Note: the terraform plans are too long. Please check the workflow summary to view the full report.")
+    report_lines.append("---")
+    report_lines.append("")
+    report_lines.append("### _Note: the terraform plans are too long. Check workflow summary to view the full report._")
     return "\n".join(report_lines)
 
 
