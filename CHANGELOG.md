@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/HENNGE/terraform-check/compare/v1.6.0...v1.7.0) (2024-05-22)
+
+
+### Features
+
+* remove plan from report if comment is too long ([1b6d220](https://github.com/HENNGE/terraform-check/commit/1b6d220bb6bfd8c769e546306d05574061c6a2d0))
+
 ## [1.6.0](https://github.com/HENNGE/terraform-check/compare/v1.5.0...v1.6.0) (2024-05-08)
 
 
