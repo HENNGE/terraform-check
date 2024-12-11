@@ -7,10 +7,11 @@ from typing import Optional
 
 from jinja2 import Environment, FileSystemLoader
 
-FMT_CMD = "terraform fmt -check=true -write=false -recursive -diff"
-INIT_CMD = "terraform init -no-color"
-VALIDATE_CMD = "terraform validate -no-color"
-PLAN_CMD = "terraform plan -detailed-exitcode -no-color"
+TF_CMD = os.environ.get("TF", "terraform")
+FMT_CMD = f"{TF_CMD} fmt -check=true -write=false -recursive -diff"
+INIT_CMD = f"{TF_CMD} init -no-color"
+VALIDATE_CMD = f"{TF_CMD} validate -no-color"
+PLAN_CMD = f"{TF_CMD} plan -detailed-exitcode -no-color"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("path", help="path to run terraform checks", type=str)
