@@ -38,14 +38,40 @@ runs:
       with:
         python-version: "3.12"
 
-    - name: Setup tfenv
+    - name: Setup tenv
       if: ${{ inputs.terraform_version != 'system' }}
       run: |
-        if [[ ! -d ~/.tfenv ]]; then
-          git clone -b v3.0.0 https://github.com/tfutils/tfenv.git ~/.tfenv
+        platform=
+        case "$(uname)" in
+          Darwin) platform="Darwin";;
+           Linux) platform="Linux";;
+               *) 1>&2 printf 'Runner unsupported: %s\n' "$(uname)" && exit 1 ;;
+        esac
+
+        arch="$(uname -m)"
+        if [[ "$arch" = "arm64" ]] || [[ "$arch" = "aarch64" ]]; then
+          arch="aarch64"
+        elif [[ "$arch" = "x86_64" ]] ; then
+          :
+        else
+          1>&2 printf 'Runner unsupported: %s (%s)\n' "$(uname)" "$arch"
+          exit 1
         fi
-        sudo ln -sf ~/.tfenv/bin/* /usr/local/bin
+
+        mkdir tenv
+        (
+          cd tenv
+          wget "https://github.com/tofuutils/tenv/releases/download/$TENV_VERSION/tenv_""$TENV_VERSION""_""$platform""_""$arch.tar.gz"
+          tar -xf tenv*.tar.gz
+          rm tenv*tar.gz
+
+          find . -executable -type f -print0 | xargs -0 -I xx sudo install -o root -g root -Dm755 xx /usr/local/bin/xx
+        )
+        rm -rf tenv
       shell: bash
+      env:
+        # renovate: datasource=github-releases depName=tofuutils/tenv
+        TENV_VERSION: 'v4.1.0'
 
     - run: |
         python -m venv venv
@@ -81,8 +107,8 @@ runs:
             : # using whatever we setup previously
           else
             # Change Terraform version
-            tfenv install "${versions[$i]}"
-            tfenv use "${versions[$i]}"
+            tenv tf install "${versions[$i]}"
+            tenv tf use "${versions[$i]}"
           fi
 
           if [ -z "${plan_args[$i]}" ] ; then
