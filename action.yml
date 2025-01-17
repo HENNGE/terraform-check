@@ -11,6 +11,9 @@ inputs:
   terraform_version:
     description: "Terraform version to run the check against. Set to 'system' to use the system terraform."
     default: "latest"
+  terraform_binary:
+    description: "Terraform binary to use. Defaults to 'terraform'. Can be set to 'tofu' to use opentofu."
+    default: "terraform"
   plan_args:
     description: "Optional: Additional arguments to pass to terraform plan. This should be passed as json array."
   post_comment:
@@ -37,6 +40,22 @@ runs:
     - uses: actions/setup-python@v5
       with:
         python-version: "3.12"
+
+    - id: set-binary
+      env:
+        TERRAFORM_BINARY: ${{ inputs.terraform_binary }}
+      run: |
+        # sanitise input
+        if [[ "$TERRAFORM_BINARY" == "tofu" ]] ; then
+          printf 'TF=%s\n' "tofu" >> "$GITHUB_ENV"
+        elif [[ "$TERRAFORM_BINARY" == "terraform" ]] ; then
+          printf 'TF=%s\n' "terraform" >> "$GITHUB_ENV"
+        else
+          1>&2 printf 'Unsupported terraform binary %s\n' "$TERRAFORM_BINARY"
+          exit 1
+        fi
+      shell: bash
+
 
     - name: Setup tenv
       if: ${{ inputs.terraform_version != 'system' }}
@@ -101,14 +120,14 @@ runs:
           fi
 
           if [ "${versions[$i]}" = "system" ] ; then
-            echo "Using system provided terraform"
-            terraform --version
+            echo "Using system provided $TF"
+            "$TF" --version
           elif [ -z "${versions[$i]}" ] ; then
             : # using whatever we setup previously
           else
-            # Change Terraform version
-            tenv tf install "${versions[$i]}"
-            tenv tf use "${versions[$i]}"
+            # Change version
+            tenv "$TF" install "${versions[$i]}"
+            tenv "$TF" use "${versions[$i]}"
           fi
 
           if [ -z "${plan_args[$i]}" ] ; then
