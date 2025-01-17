@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.0](https://github.com/HENNGE/terraform-check/compare/v1.7.0...v1.8.0) (2025-01-17)
+
+
+### Features
+
+* add support for planning with opentofu ([#37](https://github.com/HENNGE/terraform-check/issues/37)) ([dce0cbf](https://github.com/HENNGE/terraform-check/commit/dce0cbf3ceea02ce04b1494732f7b2cbba49032d))
+* use tenv for managing terraform versions ([#38](https://github.com/HENNGE/terraform-check/issues/38)) ([ba947eb](https://github.com/HENNGE/terraform-check/commit/ba947eb458848afc754deca8f991d9bf624bbe5b))
+
 ## [1.7.0](https://github.com/HENNGE/terraform-check/compare/v1.6.0...v1.7.0) (2024-05-22)
 
 
