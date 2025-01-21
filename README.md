@@ -126,6 +126,7 @@ steps:
 You can set version for each directory if checking on multiple directories. 
 If set to `system`, the action will use the terraform version already installed.
 Defaults to `latest`.
+- `terraform_binary`: (optional) Terraform binary to use. Defaults to `terraform`. Set to `tofu` to use opentofu.
 - `hide_refresh`: (optional) Hide state refresh output from report
 - `post_comment`: (optional) Whether to post [detailed report](#detailed-report) as pull request comment. 
   - If set to `true`, will post a comment every time.
