@@ -29,6 +29,15 @@ steps:
     terraform_version: 1.1.7
 ```
 
+OpenTofu is also supported:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v1
+  with:
+    directory: infra/tf
+    terraform_binary: tofu
+```
+
 If terraform is already installed, it can be used:
 ```yaml
 steps:
