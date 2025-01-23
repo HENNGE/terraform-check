@@ -56,7 +56,6 @@ runs:
         fi
       shell: bash
 
-
     - name: Setup tenv
       if: ${{ inputs.terraform_version != 'system' }}
       run: |
@@ -100,6 +99,7 @@ runs:
     - id: check
       env:
         PLAN_ARGS: ${{ inputs.plan_args }}
+        TENV_AUTO_INSTALL: true
       run: |
         set +e
         read -r -a directories <<< "${{ inputs.directory }}"
