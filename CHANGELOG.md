@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.1](https://github.com/HENNGE/terraform-check/compare/v1.8.0...v1.8.1) (2025-01-23)
+
+
+### Bug Fixes
+
+* set auto-install env to true ([#41](https://github.com/HENNGE/terraform-check/issues/41)) ([00e0a72](https://github.com/HENNGE/terraform-check/commit/00e0a720b3022d275263cbe501440a6f0a796cde))
+* set auto-install to true ([00e0a72](https://github.com/HENNGE/terraform-check/commit/00e0a720b3022d275263cbe501440a6f0a796cde))
+
 ## [1.8.0](https://github.com/HENNGE/terraform-check/compare/v1.7.0...v1.8.0) (2025-01-17)
 
 
