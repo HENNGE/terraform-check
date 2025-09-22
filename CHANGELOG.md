@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.2](https://github.com/HENNGE/terraform-check/compare/v1.8.1...v1.8.2) (2025-09-22)
+
+
+### Bug Fixes
+
+* tenv download link on ARM ([#44](https://github.com/HENNGE/terraform-check/issues/44)) ([f43717c](https://github.com/HENNGE/terraform-check/commit/f43717cdd01421c02b3e78470cfc7badf5dfb648))
+
 ## [1.8.1](https://github.com/HENNGE/terraform-check/compare/v1.8.0...v1.8.1) (2025-01-23)
 
 
