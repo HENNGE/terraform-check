@@ -68,7 +68,7 @@ runs:
 
         arch="$(uname -m)"
         if [[ "$arch" = "arm64" ]] || [[ "$arch" = "aarch64" ]]; then
-          arch="aarch64"
+          arch="arm64"
         elif [[ "$arch" = "x86_64" ]] ; then
           :
         else
@@ -89,7 +89,7 @@ runs:
       shell: bash
       env:
         # renovate: datasource=github-releases depName=tofuutils/tenv
-        TENV_VERSION: 'v4.1.0'
+        TENV_VERSION: 'v4.7.21'
 
     - run: |
         python -m venv venv
