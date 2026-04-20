@@ -100,6 +100,8 @@ runs:
       env:
         PLAN_ARGS: ${{ inputs.plan_args }}
         TENV_AUTO_INSTALL: true
+        # Workaround for tofuutils/tenv#575
+        TENV_VALIDATION: sha
       run: |
         set +e
         read -r -a directories <<< "${{ inputs.directory }}"
