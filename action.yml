@@ -89,7 +89,7 @@ runs:
       shell: bash
       env:
         # renovate: datasource=github-releases depName=tofuutils/tenv
-        TENV_VERSION: 'v4.10.1'
+        TENV_VERSION: 'v4.11.1'
 
     - run: |
         python -m venv venv
