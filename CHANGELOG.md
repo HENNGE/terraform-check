@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.4](https://github.com/HENNGE/terraform-check/compare/v1.8.3...v1.8.4) (2026-04-21)
+
+
+### Bug Fixes
+
+* bump tenv to 4.11.1 ([#50](https://github.com/HENNGE/terraform-check/issues/50)) ([c486c26](https://github.com/HENNGE/terraform-check/commit/c486c26a74b9e82b8caf069dc2d442eabe2b3d88))
+
 ## [1.8.2](https://github.com/HENNGE/terraform-check/compare/v1.8.1...v1.8.2) (2025-09-22)
 
 
