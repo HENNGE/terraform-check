@@ -13,9 +13,9 @@ jobs:
   pr_lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
-      - uses: HENNGE/conventional-pull-request-action@v0.2.1
+      - uses: HENNGE/conventional-pull-request-action@b92ba151c37ddfcf8abe522ae04be1ae0f7eaa80 # v0.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
