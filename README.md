@@ -73,6 +73,15 @@ steps:
     terraform_version: 1.1.7
 ```
 
+Multiple directories are checked one after another by default. Set `parallel` to check them all at once:
+```yaml
+steps:
+- uses: HENNGE/terraform-check@v1
+  with:
+    directory: infra/tf infra/tf2 infra/tf3
+    parallel: true
+```
+
 If checking directories, you can pass different plan arguments for each:
 ```yaml
 steps:
@@ -125,8 +134,12 @@ steps:
 - `terraform_version`: (optional) Terraform version to use. 
 You can set version for each directory if checking on multiple directories. 
 If set to `system`, the action will use the terraform version already installed.
-Defaults to `latest`.
+It takes precedence over version files in a directory, such as `.terraform-version`.
+Defaults to the version resolved from those files, or to `latest` when a directory has none.
 - `terraform_binary`: (optional) Terraform binary to use. Defaults to `terraform`. Set to `tofu` to use opentofu.
+- `parallel`: (optional) If set to `true`, check all directories concurrently instead of one after another.
+Output is always reported in the order the directories were given, whatever this is set to.
+Do not enable it together with a shared `plugin_cache_dir`, which Terraform does not support concurrent use of.
 - `hide_refresh`: (optional) Hide state refresh output from report
 - `post_comment`: (optional) Whether to post [detailed report](#detailed-report) as pull request comment. 
   - If set to `true`, will post a comment every time.
