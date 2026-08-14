@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/HENNGE/terraform-check/compare/v1.8.4...v1.9.0) (2026-08-14)
+
+
+### Features
+
+* add parallel input to check all directories concurrently ([#53](https://github.com/HENNGE/terraform-check/issues/53)) ([d869581](https://github.com/HENNGE/terraform-check/commit/d8695811051cc5e81f0433b94646621314ec7b97))
+
 ## [1.8.4](https://github.com/HENNGE/terraform-check/compare/v1.8.3...v1.8.4) (2026-04-21)
 
 
