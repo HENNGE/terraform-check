@@ -38,7 +38,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v6
+    - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
       with:
         python-version: "3.12"
 
@@ -203,7 +203,7 @@ runs:
         echo "$delimiter" >> $GITHUB_OUTPUT
       shell: bash
 
-    - uses: actions/github-script@v8
+    - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       if: ${{ inputs.post_comment == 'true' || inputs.post_comment == 'update' || ( inputs.post_comment == 'nonzero' && steps.check.outputs.returncode != 0 ) }}
       with:
         github-token: ${{ inputs.github_token }}
