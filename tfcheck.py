@@ -54,7 +54,7 @@ class CheckResult:
     plan_output: str
 
     def exitcode(self) -> int:
-        if self.fmt_success and self.validate_success:
+        if self.fmt_success and self.validate_success and self.plan_success:
             return self.plan_returncode
         else:
             return 1
@@ -83,10 +83,10 @@ class CheckResult:
     def plan_msg(self) -> str:
         if self.plan_returncode == 0:
             return "✅Passed: there are no changes✅"
-        elif self.plan_returncode == 1:
-            return "⛔️Failed: see details⛔️"
-        else:
+        elif self.plan_returncode == 2:
             return "⚠️There are changes: see details⚠️"
+        else:
+            return "⛔️Failed: see details⛔️"
 
 
 def run(cmd: str, path: str) -> subprocess.CompletedProcess:
