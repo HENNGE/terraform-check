@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.1](https://github.com/HENNGE/terraform-check/compare/v1.9.0...v1.9.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* fail the check when terraform plan crashes or is killed ([#55](https://github.com/HENNGE/terraform-check/issues/55)) ([03f73a9](https://github.com/HENNGE/terraform-check/commit/03f73a9e875905937719d2f59dff2bdea0b28766))
+* set permissions for release-please ([#57](https://github.com/HENNGE/terraform-check/issues/57)) ([72cfb93](https://github.com/HENNGE/terraform-check/commit/72cfb93df62eb4db99d934422e109b0a2ef6fce1))
+* use gha lockfile ([#56](https://github.com/HENNGE/terraform-check/issues/56)) ([d74bfd8](https://github.com/HENNGE/terraform-check/commit/d74bfd8f5ed6bd64753d2d690702f02dbc5c607d))
+
 ## [1.9.0](https://github.com/HENNGE/terraform-check/compare/v1.8.4...v1.9.0) (2026-08-14)
 
 
