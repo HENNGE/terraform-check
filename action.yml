@@ -167,20 +167,27 @@ runs:
           cat "$tmp/$i.md" >> report.md
 
           result=$(tail -1 "$tmp/$i.log")
-          echo "$result" >> result.txt
           ret=$(cat "$tmp/$i.ret" 2>/dev/null || echo 1)
 
-          if [ "$ret" -eq 1 ]; then
-            echo "::error ::$result"
-          elif [ "$ret" -eq 2 ]; then
-            echo "::warning ::$result"
-          fi
-
-          # A failed check (1) takes precedence over plan changes (2)
+          # A failed check (1) takes precedence over plan changes (2). Any other code means
+          # the check crashed or was killed before it could report, which is a failure too.
           case "$ret" in
-            1) returncode=1 ;;
-            2) [ "$returncode" -eq 0 ] && returncode=2 ;;
+            0) ;;
+            1)
+              echo "::error ::$result"
+              returncode=1
+              ;;
+            2)
+              echo "::warning ::$result"
+              [ "$returncode" -eq 0 ] && returncode=2
+              ;;
+            *)
+              result="Terraform check on ${directories[$i]} ⛔️Failed: exited with code $ret⛔️"
+              echo "::error ::$result"
+              returncode=1
+              ;;
           esac
+          echo "$result" >> result.txt
         done
 
         echo "returncode=$returncode" >> $GITHUB_OUTPUT
