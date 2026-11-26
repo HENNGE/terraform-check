@@ -38,9 +38,9 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v6
+    - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
-        python-version: "3.12"
+        python-version: "3.15"
 
     - id: set-binary
       env:
@@ -92,7 +92,7 @@ runs:
       shell: bash
       env:
         # renovate: datasource=github-releases depName=tofuutils/tenv
-        TENV_VERSION: 'v4.11.1'
+        TENV_VERSION: 'v4.16.9'
 
     - run: |
         python -m venv venv
@@ -210,7 +210,7 @@ runs:
         echo "$delimiter" >> $GITHUB_OUTPUT
       shell: bash
 
-    - uses: actions/github-script@v8
+    - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       if: ${{ inputs.post_comment == 'true' || inputs.post_comment == 'update' || ( inputs.post_comment == 'nonzero' && steps.check.outputs.returncode != 0 ) }}
       with:
         github-token: ${{ inputs.github_token }}
